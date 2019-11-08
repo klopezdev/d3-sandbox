@@ -46,6 +46,12 @@ function FloorPlanViewer() {
         init: function() {
             this.container = $('#rightSide');
             this.sandboxDiv = d3.select('#d3-sandbox');
+            $('#d3-sandbox').droppable({
+                drop: function( event, draggedItem ) { 
+                    window.infor.isc.tableManagement.findTableAtPoint( event.pageX - 210, event.pageY, draggedItem.draggable[0] );
+                } 
+            });
+            
 
             var viewPortWidth = this.floorPlanSize.width;
             var viewPortHeight = this.floorPlanSize.height;
@@ -53,7 +59,7 @@ function FloorPlanViewer() {
             this.svg = this.sandboxDiv.append("svg")
                 .attr('preserveAspectRatio', 'xMidYMid meet')
                 .attr('viewBox', "0 0 " + viewPortWidth + " " + viewPortHeight);
-
+            
             this.viewPort = this.svg.append( "g" );
 
             this.floorPlan = this.viewPort.append("svg:image")
@@ -144,9 +150,25 @@ function TableManagement( floorPlanViewer ) {
                                                        .attr("width", height)
                                                        .attr("height", height)
                                                        .attr('transform', tableRotation)
-                                                       .attr('fill', 'white');
-
-            this.tables.push( table );
+                                                       .attr('fill', 'white')
+                                                       .data([id]);
+            
+            this.tables.push( table );            
+        },
+        findTableAtPoint: function( x, y, reservation ) {
+            var point = this.__floorPlanViewer.svg.node().createSVGPoint();
+            point.x = x;
+            point.y = y;
+            
+            table = this.tables.find( function(table) { 
+                var inverseCTM = table.node().getCTM().inverse();
+                var reverseTransformedPoint = point.matrixTransform( inverseCTM );
+                return table.node().isPointInFill( reverseTransformedPoint );
+            } );
+            
+            if( table != null ) {
+                window.alert( "Seating " + reservation.innerText + " at table " + table.data()[0]);
+            }
         }
     };
 }
