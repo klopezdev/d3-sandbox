@@ -26,12 +26,9 @@ function FloorPlanViewer() {
         // TODO: The following values would be loaded from the server regarding the Site floor plan
         componentSize: { width: 1024, height: 768 }, // Dimensions of the space this component can occupy
         floorPlanSize: { width: 1923, height: 1081 }, // Dimensions of the floor plan background image
+        viewPortScaleBounds: [1, 6],
         
         floorPlanUrl: "images/cabanas.png",
-
-        // TODO: The following values would either be attributes of this component or also loaded with the above variables
-        svgPadding: { x: 10, y: 12 }, // For some reason, there is padding on the image within the SVG
-        viewPortScaleBounds: [1, 6],
 
         // DOM elements initiated by init
         rightSideDiv: undefined, 
