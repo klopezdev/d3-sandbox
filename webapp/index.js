@@ -1,14 +1,21 @@
 $(document).ready( startup );
 
 function startup() {
+    
     var reservationsList = ReservationsList();
-    reservationsList.enableClickToOpen();
-    reservationsList.enableDrag();
-
     var floorPlanViewer = FloorPlanViewer();
-    floorPlanViewer.init();
-
     var tableManagement = TableManagement( floorPlanViewer );
+    
+    window.infor = { isc: {
+        rservationsList: reservationsList,
+        floorPlanViewer: floorPlanViewer,
+        tableManagement: tableManagement
+    } };
+    
+    reservationsList.init();
+
+    floorPlanViewer.init();
+    
     tableManagement.addTable( 1, 20, 35, 40, 0 );
     tableManagement.addTable( 2, 20, 80, 40, 0 );
     tableManagement.addTable( 3, 20, 125, 40, 0 );
@@ -30,12 +37,14 @@ function FloorPlanViewer() {
         floorPlanUrl: "images/cabanas.png",
 
         // DOM elements initiated by init
+        container: undefined,
         sandboxDiv: undefined,
         svg: undefined,
         viewPort: undefined,
         floorPlan: undefined,
         
         init: function() {
+            this.container = $('#rightSide');
             this.sandboxDiv = d3.select('#d3-sandbox');
 
             var viewPortWidth = this.floorPlanSize.width;
@@ -64,17 +73,20 @@ function FloorPlanViewer() {
         },
 
         scaleViewPort: function() { 
-            // TODO: Is there a way to reference the <g> viewPort by this objects reference?
-            // Because this function is called by the on zoom handler, the this keyword does not point to this function's object
-            d3.select(this.firstChild).attr("transform", d3.event.transform); 
+            // Because this function is called by the on zoom handler, the 'this' keyword does not point to this function's object, use 'my' to get back to it
+            var my = window.infor.isc.floorPlanViewer;
+            my.viewPort.attr("transform", d3.event.transform); 
         },
     
         resizeViewer: function() {
-            var availableHeight = $('#rightSide').innerHeight();
-            var availableWidth = $('#rightSide').innerWidth();
+            // Because this function is called by the on resize handler, the 'this' keyword does not point to this function's object, use 'my' to get back to it
+            var my = window.infor.isc.floorPlanViewer;
+            
+            var availableHeight = my.container.innerHeight();
+            var availableWidth = my.container.innerWidth();
 
-            d3.select('svg').attr('height', availableHeight);
-            d3.select('svg').attr('width', availableWidth);
+            my.svg.attr('height', availableHeight);
+            my.svg.attr('width', availableWidth);
         }
     };
 }
@@ -83,24 +95,35 @@ function ReservationsList() {
     
     return {
         
+        reservationItemClass: '.reservations-item',
+        
         open: false,
         
-        enableClickToOpen: function() {
-            $( '#click' ).click( this.toggleSlidePanel );
+        container: undefined,
+        slideButton: undefined,
+        
+        init: function() {
+            this.container = $( "#leftSide" );
+            this.slideButton = $( "#click" );
+            
+            this.slideButton.click( this.toggleSlidePanel );
+            this.enableDrag();
         },
         enableDrag: function() {
-            $( '.reservations-item' ).draggable({
-                helper: 'clone'
+            $( this.reservationItemClass ).draggable({
+                helper: 'clone',
+                stop: this.toggleSlidePanel
             });
         },
-        
         toggleSlidePanel: function() {
-            $( "#leftSide" ).animate( { width:'toggle' } , 100 );
+            // Because this function is called by the on click handler, the 'this' keyword does not point to this function's object, use 'my' to get back to it
+            var my = window.infor.isc.rservationsList;
+            my.container.animate( { width:'toggle' } , 100 );
 
-            this.open = !this.open;
-            $( "#click" ).css( { left: this.open ? 210 : 0 } );
-            $( "#click" ).html( this.open ? "&#9664;" : "&#9654;" );
-            $( "#rightSide" ).css( { marginLeft: this.open ? 210 : 0 } );
+            my.open = !my.open;
+            my.slideButton.css( { left: my.open ? 210 : 0 } );
+            my.slideButton.html( my.open ? "&#9664;" : "&#9654;" );
+            $( "#rightSide" ).css( { marginLeft: my.open ? 210 : 0 } );
         }
     };
 }

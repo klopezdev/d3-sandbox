@@ -8,12 +8,11 @@ body {
     position: absolute;
     left: 0;
     background-color: white;
-
-    height: 1024px;
+    height: 100%;
     width: 200px;
     float: left;
     display: none;
-    padding: 5px;
+    padding: 0px 5px;
 }
 
 #rightSide {
