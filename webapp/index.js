@@ -1,3 +1,5 @@
+d3Sandbox();
+
 function d3Sandbox() {
 
     $(document).ready( startup );
@@ -49,6 +51,16 @@ function d3Sandbox() {
                 );
         
         resizeViewer();
+        
+        tableManagement().createTable( 1, 20, 35, 40, 0, viewPort );
+        tableManagement().createTable( 2, 20, 80, 40, 0, viewPort );
+        tableManagement().createTable( 3, 20, 125, 40, 0, viewPort );
+        tableManagement().createTable( 4, 20, 170, 40, 0, viewPort );
+        tableManagement().createTable( 5, 20, 1260, 214, 40, viewPort );
+        tableManagement().createTable( 6, 20, 1286, 180, 40, viewPort );
+        tableManagement().createTable( 7, 20, 1337, 133, 55, viewPort );
+        tableManagement().createTable( 8, 20, 1398, 102, 73, viewPort );
+        tableManagement().createTable( 9, 20, 1466, 90, 88, viewPort );
     }
 
     function scaleViewPort() { 
@@ -76,4 +88,22 @@ function d3Sandbox() {
     }
 }
 
-d3Sandbox();
+function tableManagement() {
+    
+    var obj = {};
+    
+    
+    obj.createTable = function( id, height, x, y, rotation, container ) {
+        var tableRotation = 'rotate(' + rotation + ', ' + (x + (height / 2)) + ', ' + (y + ( height / 2 )) + ')';
+        
+        var rectangle = container.append("rect")
+                                 .attr("x", x)
+                                 .attr("y", y)
+                                 .attr("width", height)
+                                 .attr("height", height)
+                                 .attr('transform', tableRotation)
+                                 .attr('fill', 'white');
+    }
+    
+    return obj;
+}
