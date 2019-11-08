@@ -30,7 +30,6 @@ function FloorPlanViewer() {
         floorPlanUrl: "images/cabanas.png",
 
         // DOM elements initiated by init
-        rightSideDiv: undefined, 
         sandboxDiv: undefined,
         svg: undefined,
         viewPort: undefined,
@@ -60,7 +59,6 @@ function FloorPlanViewer() {
                      .on("zoom", this.scaleViewPort)
                     );
 
-            this.rightSideDiv = $( '#rightSide' );
             window.addEventListener('resize', this.resizeViewer );
             this.resizeViewer();
         },
