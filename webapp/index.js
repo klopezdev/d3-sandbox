@@ -24,7 +24,6 @@ function FloorPlanViewer() {
     
     return {
         // TODO: The following values would be loaded from the server regarding the Site floor plan
-        componentSize: { width: 1024, height: 768 }, // Dimensions of the space this component can occupy
         floorPlanSize: { width: 1923, height: 1081 }, // Dimensions of the floor plan background image
         viewPortScaleBounds: [1, 6],
         
@@ -73,8 +72,8 @@ function FloorPlanViewer() {
         },
     
         resizeViewer: function() {
-            var availableHeight = $('righSide').innerHeight();
-            var availableWidth = $('righSide').innerWidth();
+            var availableHeight = $('#rightSide').innerHeight();
+            var availableWidth = $('#rightSide').innerWidth();
 
             d3.select('svg').attr('height', availableHeight);
             d3.select('svg').attr('width', availableWidth);
