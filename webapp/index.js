@@ -73,11 +73,11 @@ function FloorPlanViewer() {
         },
     
         resizeViewer: function() {
-            var availableHeight = this.rightSideDiv.innerHeight();
-            var availableWidth = this.rightSideDiv.innerWidth();
+            var availableHeight = $('righSide').innerHeight();
+            var availableWidth = $('righSide').innerWidth();
 
-            this.svg.attr('height', availableHeight);
-            this.svg.attr('width', availableWidth);
+            d3.select('svg').attr('height', availableHeight);
+            d3.select('svg').attr('width', availableWidth);
         }
     };
 }
